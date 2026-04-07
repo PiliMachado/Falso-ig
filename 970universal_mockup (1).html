@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>970 Universal — Instagram Mockup</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#111827;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:2rem 1rem;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;gap:2rem;}
+h1{color:rgba(255,255,255,0.5);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:400;}
+
+/* PHONE SHELL */
+.phone{width:340px;background:#000;border-radius:42px;overflow:hidden;border:8px solid #1c1c1e;box-shadow:0 40px 100px rgba(0,0,0,0.7);position:relative;}
+.statusbar{background:#000;padding:12px 22px 4px;display:flex;justify-content:space-between;}
+.statusbar span{color:white;font-size:12px;font-weight:700;}
+
+/* SCREENS — only one visible at a time */
+.screen{display:none;flex-direction:column;background:#000;overflow-y:auto;max-height:680px;}
+.screen.active{display:flex;}
+
+/* ── FEED SCREEN ── */
+.ig-topbar{background:#000;border-bottom:0.5px solid #262626;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.ig-handle{color:white;font-size:16px;font-weight:800;}
+.ig-icons{display:flex;gap:16px;}
+.ig-icon{color:white;font-size:18px;}
+
+.profile-section{padding:14px 16px;flex-shrink:0;}
+.profile-row{display:flex;align-items:center;gap:16px;margin-bottom:12px;}
+.av{width:72px;height:72px;border-radius:50%;background:#111;border:2px solid #333;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.av-inner{display:flex;flex-direction:column;align-items:center;gap:1px;}
+.av-row{display:flex;align-items:center;gap:2px;}
+.av-dot{width:9px;height:9px;border-radius:50%;background:#C0392B;}
+.av-970{color:white;font-size:15px;font-weight:900;letter-spacing:-0.5px;}
+.av-univ{color:rgba(255,255,255,0.3);font-size:5px;letter-spacing:0.15em;text-transform:uppercase;}
+.stats{display:flex;flex:1;justify-content:space-around;}
+.stat-n{color:white;font-size:15px;font-weight:700;text-align:center;}
+.stat-l{color:#a0a0a0;font-size:10px;text-align:center;margin-top:1px;}
+.bio-name{color:white;font-size:13px;font-weight:700;margin-bottom:2px;}
+.bio-sub{color:#888;font-size:12px;margin-bottom:4px;}
+.bio-txt{color:#d0d0d0;font-size:12px;line-height:1.5;margin-bottom:4px;}
+.bio-link{color:#4CB5F5;font-size:12px;}
+.profile-btns{display:flex;gap:8px;margin-top:10px;}
+.pb{flex:1;background:#333;border:none;border-radius:8px;padding:7px;color:white;font-size:12px;font-weight:600;cursor:pointer;}
+.pb-f{background:#1877f2;}
+
+.highlights-row{display:flex;gap:10px;padding:10px 12px;border-bottom:0.5px solid #262626;flex-shrink:0;overflow:hidden;}
+.hl{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;}
+.hl-ring{width:54px;height:54px;border-radius:50%;padding:2px;}
+.hl-in{width:100%;height:100%;border-radius:50%;border:2.5px solid #000;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.hl-lbl{color:#ccc;font-size:9px;text-align:center;max-width:54px;}
+
+.feed-tabs{display:flex;border-bottom:0.5px solid #262626;flex-shrink:0;}
+.feed-tab{flex:1;padding:10px;display:flex;justify-content:center;border-bottom:1.5px solid transparent;}
+.feed-tab.on{border-bottom-color:white;}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:#262626;}
+.cell{aspect-ratio:1;position:relative;overflow:hidden;cursor:pointer;background:#111;}
+.cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.2s;}
+.cell:hover img{transform:scale(1.05);}
+.cell-top{position:absolute;top:0;left:0;right:0;background:#000;padding:4px 6px;display:flex;align-items:center;justify-content:space-between;}
+.cell-logo{display:flex;align-items:center;gap:2px;}
+.cell-ldot{width:5px;height:5px;border-radius:50%;background:#C0392B;}
+.cell-l970{font-size:8px;font-weight:900;color:white;}
+.cell-prog{display:flex;align-items:center;gap:2px;}
+.cell-pdot{width:4px;height:4px;border-radius:50%;}
+.cell-ptxt{font-size:6px;font-weight:600;color:rgba(255,255,255,0.55);}
+.cell-bot{position:absolute;bottom:0;left:0;right:0;}
+.cell-strip{padding:2px 5px;}
+.cell-stxt{font-size:7px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.04em;}
+.cell-lower{background:rgba(0,0,0,0.82);padding:3px 5px;}
+.cell-name{font-size:7.5px;font-weight:700;color:white;text-transform:uppercase;line-height:1.2;}
+.cell-q{font-size:6px;color:rgba(255,255,255,0.75);margin-top:1px;line-height:1.3;}
+.cell-badge{position:absolute;top:5px;right:5px;color:white;font-size:10px;text-shadow:0 1px 3px rgba(0,0,0,0.8);}
+
+/* ── REEL SCREEN ── */
+.reel-wrap{position:relative;width:100%;aspect-ratio:9/16;background:#000;flex-shrink:0;overflow:hidden;}
+.reel-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.reel-top{position:absolute;top:0;left:0;right:0;padding:10px 12px;display:flex;align-items:flex-start;justify-content:space-between;}
+.reel-logo-block{display:flex;flex-direction:column;gap:2px;background:rgba(0,0,0,0.6);padding:5px 8px;border-radius:8px;}
+.reel-logo-row{display:flex;align-items:center;gap:3px;}
+.reel-dot{width:8px;height:8px;border-radius:50%;background:#C0392B;}
+.reel-970{font-size:14px;font-weight:900;color:white;letter-spacing:-0.4px;}
+.reel-univ{font-size:5px;color:rgba(255,255,255,0.4);letter-spacing:0.12em;text-transform:uppercase;margin-left:1px;margin-top:2px;}
+.reel-prog-row{display:flex;align-items:center;gap:3px;margin-top:2px;}
+.reel-pdot{width:6px;height:6px;border-radius:50%;}
+.reel-pname{font-size:7px;color:rgba(255,255,255,0.6);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;}
+.reel-right{display:flex;flex-direction:column;align-items:center;gap:16px;position:absolute;right:10px;bottom:100px;}
+.reel-action{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;}
+.reel-action-icon{font-size:22px;color:white;}
+.reel-action-lbl{font-size:9px;color:rgba(255,255,255,0.7);}
+.reel-bot{position:absolute;bottom:0;left:0;right:0;}
+.reel-strip{padding:3px 12px;}
+.reel-stxt{font-size:9px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.05em;}
+.reel-lower{background:rgba(0,0,0,0.8);padding:8px 12px 14px;}
+.reel-person{font-size:12px;font-weight:700;color:white;text-transform:uppercase;}
+.reel-quote{font-size:9px;color:rgba(255,255,255,0.85);margin-top:3px;line-height:1.5;}
+.reel-meta{font-size:7px;color:rgba(255,255,255,0.3);margin-top:4px;letter-spacing:0.05em;}
+
+/* Audio wave */
+.audio-bar{background:#111;padding:8px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.audio-btn{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;flex-shrink:0;}
+.play-tri{width:0;height:0;border-style:solid;border-width:5px 0 5px 9px;border-color:transparent transparent transparent white;margin-left:2px;}
+.pause-duo{display:flex;gap:2px;}
+.pause-b{width:3px;height:10px;background:white;border-radius:1px;}
+.wave-row{flex:1;height:26px;display:flex;align-items:center;gap:1px;}
+.wb{border-radius:1px;width:3px;}
+.atime{font-size:9px;color:#777;min-width:52px;text-align:right;}
+
+/* ── POST SCREEN (square) ── */
+.post-wrap{position:relative;width:100%;aspect-ratio:1;background:#000;flex-shrink:0;overflow:hidden;}
+.post-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.post-top{position:absolute;top:0;left:0;right:0;background:#000;padding:7px 12px;display:flex;align-items:flex-start;justify-content:space-between;}
+.post-logo-block{display:flex;flex-direction:column;gap:2px;}
+.post-logo-row{display:flex;align-items:center;gap:3px;}
+.post-dot{width:9px;height:9px;border-radius:50%;background:#C0392B;}
+.post-970{font-size:15px;font-weight:900;color:white;letter-spacing:-0.4px;}
+.post-univ{font-size:5px;color:rgba(255,255,255,0.35);letter-spacing:0.12em;text-transform:uppercase;margin-left:1px;margin-top:3px;}
+.post-prog-row{display:flex;align-items:center;gap:3px;margin-top:2px;}
+.post-pdot{width:6px;height:6px;border-radius:50%;}
+.post-pname{font-size:7px;color:rgba(255,255,255,0.5);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;}
+.post-bot{position:absolute;bottom:0;left:0;right:0;}
+.post-strip{padding:3px 12px;}
+.post-stxt{font-size:9px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.05em;}
+.post-lower{background:rgba(0,0,0,0.85);padding:8px 12px;}
+.post-person{font-size:12px;font-weight:700;color:white;text-transform:uppercase;}
+.post-quote{font-size:9px;color:rgba(255,255,255,0.85);margin-top:3px;line-height:1.5;}
+.post-meta{font-size:7px;color:rgba(255,255,255,0.3);margin-top:4px;}
+
+/* PRESENTACION */
+.pres-bg{background:#080814;width:100%;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;padding:20px;flex-shrink:0;}
+.pres-logo{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.pres-logo-r{display:flex;align-items:center;gap:4px;}
+.pres-d{width:10px;height:10px;border-radius:50%;background:#C0392B;}
+.pres-970{font-size:22px;font-weight:900;color:white;letter-spacing:-0.5px;}
+.pres-univ{font-size:6px;color:rgba(255,255,255,0.25);letter-spacing:0.18em;text-transform:uppercase;margin-left:2px;margin-top:4px;}
+.pres-pn{font-size:7px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;}
+.pres-div{height:1.5px;width:36px;}
+.pres-hoy{font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;}
+.pres-photo{width:74px;height:74px;border-radius:50%;object-fit:cover;border-width:3px;border-style:solid;}
+.pres-name{font-size:15px;font-weight:900;color:white;text-transform:uppercase;text-align:center;letter-spacing:0.04em;}
+.pres-role{font-size:8px;color:rgba(255,255,255,0.4);text-align:center;letter-spacing:0.09em;text-transform:uppercase;}
+.pres-badge{border-radius:20px;padding:5px 16px;}
+.pres-badge-t{font-size:8px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.1em;}
+.pres-plats{display:flex;gap:14px;align-items:center;}
+.pres-plat{text-align:center;}
+.pres-pval{font-size:10px;font-weight:700;color:white;}
+.pres-plbl{font-size:7px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.05em;}
+.pres-sep{width:1px;height:22px;background:rgba(255,255,255,0.1);}
+.pres-foot{width:calc(100% + 40px);padding:7px;text-align:center;margin-bottom:-20px;}
+.pres-foot-t{font-size:7.5px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:0.1em;}
+
+/* SHARED BOTTOM */
+.modal-topbar{background:#000;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid #262626;flex-shrink:0;}
+.back{color:white;font-size:24px;cursor:pointer;background:none;border:none;line-height:1;padding:0;}
+.modal-user{display:flex;align-items:center;gap:8px;flex:1;}
+.modal-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.modal-av span{font-size:8px;font-weight:900;color:white;}
+.modal-handle{color:white;font-size:13px;font-weight:700;}
+.modal-fol{color:#4CB5F5;font-size:13px;font-weight:600;margin-left:4px;}
+
+.actions{padding:10px 14px;display:flex;gap:14px;align-items:center;flex-shrink:0;}
+.act{font-size:22px;color:white;cursor:pointer;line-height:1;user-select:none;}
+.likes-row{padding:0 14px 4px;color:white;font-size:13px;font-weight:700;}
+.caption-row{padding:0 14px 4px;font-size:12px;line-height:1.6;}
+.cap-handle{color:white;font-weight:700;}
+.cap-txt{color:#d0d0d0;}
+.cap-hash{color:#4CB5F5;}
+.comments-row{padding:0 14px 4px;color:#666;font-size:12px;cursor:pointer;}
+.date-row{padding:0 14px 14px;color:#555;font-size:10px;text-transform:uppercase;letter-spacing:0.04em;}
+
+.navbar{background:#000;border-top:0.5px solid #262626;padding:8px 0 14px;display:flex;justify-content:space-around;flex-shrink:0;}
+.nav-i{font-size:20px;color:white;cursor:pointer;}
+
+/* PHOTOS DOWNLOAD SECTION */
+.photos-section{width:340px;}
+.photos-title{color:rgba(255,255,255,0.5);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;text-align:center;}
+.photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.photo-item{display:flex;flex-direction:column;gap:5px;}
+.photo-item img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;}
+.photo-item a{background:#1a1a2e;border:0.5px solid rgba(255,255,255,0.15);border-radius:6px;padding:5px 8px;color:rgba(255,255,255,0.6);font-size:9px;text-decoration:none;text-align:center;letter-spacing:0.05em;text-transform:uppercase;display:block;}
+.photo-item a:hover{background:rgba(255,255,255,0.1);}
+</style>
+</head>
+<body>
+
+<h1>970 Universal — Instagram Mockup</h1>
+
+<!-- PHONE -->
+<div class="phone" id="phone">
+  <div class="statusbar"><span>9:41</span><span>▲▲ WiFi ▪▪</span></div>
+
+  <!-- SCREEN: FEED -->
+  <div class="screen active" id="s-feed">
+    <div class="ig-topbar">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span class="ig-handle">970universal</span>
+        <span style="color:#555;font-size:12px;">▾</span>
+      </div>
+      <div class="ig-icons">
+        <span class="ig-icon">＋</span>
+        <span class="ig-icon">☰</span>
+      </div>
+    </div>
+    <div class="profile-section">
+      <div class="profile-row">
+        <div class="av">
+          <div class="av-inner">
+            <div class="av-row"><div class="av-dot"></div><span class="av-970">970</span></div>
+            <span class="av-univ">UNIVERSAL</span>
+          </div>
+        </div>
+        <div class="stats">
+          <div><div class="stat-n">2.840</div><div class="stat-l">posts</div></div>
+          <div><div class="stat-n">18,4k</div><div class="stat-l">seguidores</div></div>
+          <div><div class="stat-n">312</div><div class="stat-l">seguidos</div></div>
+        </div>
+      </div>
+      <div class="bio-name">Radio 970 Universal</div>
+      <div class="bio-sub">Estación de radio · Montevideo</div>
+      <div class="bio-txt">📻 La Oral · Punto de Encuentro · 970 Noticias<br>🏀 Pica la Naranja · 🇺🇾 La Selección Uruguaya</div>
+      <div class="bio-link">🔗 970universal.com</div>
+      <div class="profile-btns">
+        <button class="pb pb-f">Seguir</button>
+        <button class="pb">Mensaje</button>
+        <button class="pb" style="flex:0;padding:7px 10px;">▾</button>
+      </div>
+    </div>
+    <div class="highlights-row">
+      <div class="hl"><div class="hl-ring" style="background:linear-gradient(45deg,#1B8A4E,#5DC889);"><div class="hl-in">⚽</div></div><div class="hl-lbl">La Oral</div></div>
+      <div class="hl"><div class="hl-ring" style="background:linear-gradient(45deg,#1A5BAB,#4C9EF5);"><div class="hl-in">🎙</div></div><div class="hl-lbl">Pto. Encuentro</div></div>
+      <div class="hl"><div class="hl-ring" style="background:linear-gradient(45deg,#C0392B,#E87070);"><div class="hl-in">📰</div></div><div class="hl-lbl">Noticias</div></div>
+      <div class="hl"><div class="hl-ring" style="background:linear-gradient(45deg,#E07B00,#F5B84C);"><div class="hl-in">🏀</div></div><div class="hl-lbl">Pica</div></div>
+      <div class="hl"><div class="hl-ring" style="background:linear-gradient(45deg,#009ACE,#4DCFFF);"><div class="hl-in">🇺🇾</div></div><div class="hl-lbl">Selección</div></div>
+    </div>
+    <div class="feed-tabs">
+      <div class="feed-tab on"><span style="font-size:17px;color:white;">⊞</span></div>
+      <div class="feed-tab"><span style="font-size:17px;color:#555;">▷</span></div>
+      <div class="feed-tab"><span style="font-size:17px;color:#555;">🏷</span></div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="navbar">
+      <span class="nav-i">🏠</span><span class="nav-i">🔍</span><span class="nav-i">＋</span><span class="nav-i">🔔</span><span class="nav-i">👤</span>
+    </div>
+  </div>
+
+  <!-- SCREEN: REEL -->
+  <div class="screen" id="s-reel">
+    <div class="modal-topbar">
+      <button class="back" onclick="goFeed()">‹</button>
+      <div class="modal-user">
+        <div class="modal-av" id="rv-av"><span>970</span></div>
+        <span class="modal-handle">970universal</span>
+        <span class="modal-fol">· Seguir</span>
+      </div>
+      <span style="color:white;font-size:18px;">···</span>
+    </div>
+    <div class="reel-wrap">
+      <img id="rv-img" src="" alt="">
+      <div class="reel-top">
+        <div class="reel-logo-block">
+          <div class="reel-logo-row"><div class="reel-dot"></div><span class="reel-970">970</span><span class="reel-univ">UNIVERSAL</span></div>
+          <div class="reel-prog-row"><div class="reel-pdot" id="rv-pdot"></div><span class="reel-pname" id="rv-pname"></span></div>
+        </div>
+        <span style="color:white;font-size:18px;">···</span>
+      </div>
+      <div class="reel-right">
+        <div class="reel-action" onclick="toggleLikeR()"><span class="reel-action-icon" id="rv-like">♡</span><span class="reel-action-lbl" id="rv-likeN"></span></div>
+        <div class="reel-action"><span class="reel-action-icon">💬</span><span class="reel-action-lbl" id="rv-comN"></span></div>
+        <div class="reel-action"><span class="reel-action-icon">↗</span><span class="reel-action-lbl">Enviar</span></div>
+        <div class="reel-action" onclick="toggleSaveR()"><span class="reel-action-icon" id="rv-save">🔖</span><span class="reel-action-lbl">Guardar</span></div>
+        <div class="reel-action"><span class="reel-action-icon">⋯</span></div>
+      </div>
+      <div class="reel-bot">
+        <div class="reel-strip" id="rv-strip"><span class="reel-stxt" id="rv-stxt"></span></div>
+        <div class="reel-lower">
+          <div class="reel-person" id="rv-person"></div>
+          <div class="reel-quote" id="rv-quote"></div>
+          <div class="reel-meta">970AM · 970universal.com · ⓕ ⓘ ✕ ▶</div>
+        </div>
+      </div>
+    </div>
+    <div class="audio-bar">
+      <button class="audio-btn" id="rv-playbtn" onclick="togglePlay()"><div class="play-tri" id="rv-playicon"></div></button>
+      <div class="wave-row" id="rv-wave"></div>
+      <span class="atime" id="rv-time">0:00 / 1:00</span>
+    </div>
+    <div class="actions">
+      <span class="act">♡</span><span class="act">💬</span><span class="act">↗</span>
+      <span class="act" style="margin-left:auto;">🔖</span>
+    </div>
+    <div class="likes-row" id="rv-likes"></div>
+    <div class="caption-row">
+      <span class="cap-handle">970universal </span>
+      <span class="cap-txt" id="rv-cap"></span>
+      <span class="cap-hash" id="rv-hash"></span>
+    </div>
+    <div class="comments-row" id="rv-coms"></div>
+    <div class="date-row" id="rv-date"></div>
+    <div class="navbar">
+      <span class="nav-i">🏠</span><span class="nav-i">🔍</span><span class="nav-i">＋</span><span class="nav-i">🔔</span><span class="nav-i">👤</span>
+    </div>
+  </div>
+
+  <!-- SCREEN: POST SQUARE -->
+  <div class="screen" id="s-post">
+    <div class="modal-topbar">
+      <button class="back" onclick="goFeed()">‹</button>
+      <div class="modal-user">
+        <div class="modal-av" id="pv-av"><span>970</span></div>
+        <span class="modal-handle">970universal</span>
+        <span class="modal-fol">· Seguir</span>
+      </div>
+      <span style="color:white;font-size:18px;">···</span>
+    </div>
+    <div class="post-wrap">
+      <img id="pv-img" src="" alt="">
+      <div class="post-top">
+        <div class="post-logo-block">
+          <div class="post-logo-row"><div class="post-dot"></div><span class="post-970">970</span><span class="post-univ">UNIVERSAL</span></div>
+          <div class="post-prog-row"><div class="post-pdot" id="pv-pdot"></div><span class="post-pname" id="pv-pname"></span></div>
+        </div>
+        <span style="color:white;font-size:18px;">···</span>
+      </div>
+      <div class="post-bot">
+        <div class="post-strip" id="pv-strip"><span class="post-stxt" id="pv-stxt"></span></div>
+        <div class="post-lower">
+          <div class="post-person" id="pv-person"></div>
+          <div class="post-quote" id="pv-quote"></div>
+          <div class="post-meta">970AM · 970universal.com · ⓕ ⓘ ✕ ▶</div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <span class="act" id="pv-like" onclick="toggleLikeP()">♡</span>
+      <span class="act">💬</span><span class="act">↗</span>
+      <span class="act" id="pv-save" style="margin-left:auto;" onclick="toggleSaveP()">🔖</span>
+    </div>
+    <div class="likes-row" id="pv-likes"></div>
+    <div class="caption-row">
+      <span class="cap-handle">970universal </span>
+      <span class="cap-txt" id="pv-cap"></span>
+      <span class="cap-hash" id="pv-hash"></span>
+    </div>
+    <div class="comments-row" id="pv-coms"></div>
+    <div class="date-row" id="pv-date"></div>
+    <div class="navbar">
+      <span class="nav-i">🏠</span><span class="nav-i">🔍</span><span class="nav-i">＋</span><span class="nav-i">🔔</span><span class="nav-i">👤</span>
+    </div>
+  </div>
+
+  <!-- SCREEN: PRESENTACION -->
+  <div class="screen" id="s-pres">
+    <div class="modal-topbar">
+      <button class="back" onclick="goFeed()">‹</button>
+      <div class="modal-user">
+        <div class="modal-av" id="presv-av"><span>970</span></div>
+        <span class="modal-handle">970universal</span>
+        <span class="modal-fol">· Seguir</span>
+      </div>
+      <span style="color:white;font-size:18px;">···</span>
+    </div>
+    <div class="pres-bg" id="pres-bg">
+      <div class="pres-logo">
+        <div class="pres-logo-r"><div class="pres-d"></div><span class="pres-970">970</span><span class="pres-univ">UNIVERSAL</span></div>
+        <span class="pres-pn" id="pres-pname"></span>
+      </div>
+      <div class="pres-div" id="pres-div"></div>
+      <span class="pres-hoy">Hoy habla</span>
+      <img class="pres-photo" id="pres-photo" src="" alt="">
+      <span class="pres-name" id="pres-name"></span>
+      <span class="pres-role" id="pres-role"></span>
+      <div class="pres-badge" id="pres-badge"><span class="pres-badge-t" id="pres-badge-t"></span></div>
+      <div class="pres-plats">
+        <div class="pres-plat"><div class="pres-pval">970 AM</div><div class="pres-plbl">Radio</div></div>
+        <div class="pres-sep"></div>
+        <div class="pres-plat"><div class="pres-pval">YouTube</div><div class="pres-plbl">En vivo</div></div>
+        <div class="pres-sep"></div>
+        <div class="pres-plat"><div class="pres-pval">Instagram</div><div class="pres-plbl">Live</div></div>
+      </div>
+      <div class="pres-foot" id="pres-foot"><span class="pres-foot-t" id="pres-foot-t"></span></div>
+    </div>
+    <div class="actions">
+      <span class="act" id="presv-like" onclick="toggleLikePres()">♡</span>
+      <span class="act">💬</span><span class="act">↗</span>
+      <span class="act" id="presv-save" style="margin-left:auto;" onclick="toggleSavePres()">🔖</span>
+    </div>
+    <div class="likes-row" id="presv-likes"></div>
+    <div class="caption-row">
+      <span class="cap-handle">970universal </span>
+      <span class="cap-txt" id="presv-cap"></span>
+      <span class="cap-hash" id="presv-hash"></span>
+    </div>
+    <div class="comments-row" id="presv-coms"></div>
+    <div class="date-row" id="presv-date"></div>
+    <div class="navbar">
+      <span class="nav-i">🏠</span><span class="nav-i">🔍</span><span class="nav-i">＋</span><span class="nav-i">🔔</span><span class="nav-i">👤</span>
+    </div>
+  </div>
+</div>
+
+<!-- PHOTOS DOWNLOAD -->
+<div class="photos-section">
+  <div class="photos-title">Fotos del mockup — descargar</div>
+  <div class="photos-grid" id="photos-grid"></div>
+</div>
+
+<script>
+const PROG = {
+  oral:     {color:'#1B8A4E', icon:'⚽', name:'La Oral Deportiva',     short:'La Oral'},
+  punto:    {color:'#1A5BAB', icon:'🎙', name:'Punto de Encuentro',     short:'Pto. Encuentro'},
+  noticias: {color:'#C0392B', icon:'📰', name:'970 Noticias',           short:'970 Noticias'},
+  pica:     {color:'#E07B00', icon:'🏀', name:'Pica la Naranja',        short:'Pica la Naranja'},
+  selec:    {color:'#009ACE', icon:'🇺🇾', name:'La Selección Uruguaya', short:'La Selección'},
+};
+
+const POSTS = [
+  {prog:'oral',     type:'reel',  img:'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80', person:'Diego Aguirre',               quote:'"Fue penal a Togni y cambiaba todo"',                     likes:'1.243', comments:'48',  duration:'1:12', caption:'Palabras de Diego Aguirre post caída de Peñarol ante Racing. El DT habló en exclusiva con La Oral Deportiva.', hashtags:'#LaOralDeportiva #Peñarol #Racing', date:'HACE 2 DÍAS'},
+  {prog:'punto',    type:'reel',  img:'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&q=80', person:'Nicolás Martinelli',           quote:'"Marset era un facilitador, no un narco tipo Escobar"',   likes:'2.104', comments:'137', duration:'2:05', caption:'El fiscal Martinelli en Punto de Encuentro. La entrevista más polémica del año sobre el caso Marset.', hashtags:'#PuntodeEncuentro #Martinelli #Marset', date:'HACE 2 DÍAS'},
+  {prog:'noticias', type:'post',  img:'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&q=80', person:'Flash Informativo 27/03/2026', quote:'Con Andrés Rega',                                          likes:'412',   comments:'11',  duration:'5:34', caption:'Flash Informativo del 27 de marzo. Las principales noticias del día desde los estudios de 970 Universal.', hashtags:'#970Noticias #FlashInformativo #Uruguay', date:'HACE 2 DÍAS'},
+  {prog:'oral',     type:'reel',  img:'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=600&q=80',   person:'Peñarol 1 – 2 Racing',         quote:'Olivera y el descuento, pero no alcanzó',                 likes:'3.891', comments:'214', duration:'0:58', caption:'El capitán aurinegro puso el descuento pero no le alcanzó. Fecha 8 del Torneo Apertura.', hashtags:'#LaOralDeportiva #Peñarol #Racing #AUF', date:'HACE 3 DÍAS'},
+  {prog:'oral',     type:'pres',  img:'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=600&q=80',   person:'Jorge Bava',                   quote:'Nuevo técnico del Club Nacional de Fútbol',               likes:'1.540', comments:'67',  duration:null,   caption:'Esta noche desde las 20:00 hs, Jorge Bava habla por primera vez como técnico de Nacional en La Oral Deportiva.', hashtags:'#LaOralDeportiva #Nacional #JorgeBava', date:'HACE 4 DÍAS', hora:'HOY · 20:00 HS'},
+  {prog:'pica',     type:'reel',  img:'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600&q=80',   person:'Selección de Básquet',         quote:'"Hay que ganar las dos ventanas para clasificar"',         likes:'876',   comments:'32',  duration:'1:30', caption:'La Selección Uruguaya de básquet se prepara para las ventanas FIBA. Análisis completo en Pica la Naranja.', hashtags:'#PicaLaNaranja #BasquetUruguay #FIBA', date:'HACE 3 DÍAS'},
+  {prog:'selec',    type:'reel',  img:'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=600&q=80', person:'Marcelo Bielsa',               quote:'"Jugar contra los mejores me entusiasma profundamente"',  likes:'5.102', comments:'389', duration:'2:34', caption:'El Loco habló antes del partido de Uruguay ante Inglaterra. Una de sus frases más recordadas del proceso.', hashtags:'#LaSeleccionUruguaya #Bielsa #Celeste', date:'HACE 4 DÍAS'},
+  {prog:'punto',    type:'post',  img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80', person:'Pedro Bordaberry',             quote:'"Apostamos a lo que nos dice Lula que tenemos que hacer"',likes:'987',   comments:'203', duration:'1:45', caption:'El senador Colorado analizó la política exterior del gobierno de Orsi. Rapiditas con Punto de Encuentro.', hashtags:'#PuntodeEncuentro #Bordaberry #Politica', date:'HACE 5 DÍAS'},
+  {prog:'selec',    type:'pres',  img:'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600&q=80', person:'Federico Valverde',            quote:'Figura de Uruguay ante Inglaterra',                       likes:'6.230', comments:'521', duration:null,   caption:'Hoy a las 21:00 hs, Federico Valverde en exclusiva con La Selección Uruguaya en 970 Universal. En vivo por radio, YouTube e Instagram.', hashtags:'#LaSeleccionUruguaya #Valverde #Celeste', date:'HACE 5 DÍAS', hora:'HOY · 21:00 HS'},
+];
+
+// audio state
+let playing = false;
+let animId = null;
+let waveBars = [];
+let waveProgress = 0;
+let currentDur = '1:00';
+let rLiked = false, rSaved = false, pLiked = false, pSaved = false, presLiked = false, presSaved = false;
+let currentPost = null;
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goFeed() {
+  stopAudio();
+  show('s-feed');
+}
+
+function openPost(i) {
+  stopAudio();
+  waveProgress = 0;
+  currentPost = POSTS[i];
+  const p = currentPost;
+  const prog = PROG[p.prog];
+
+  if (p.type === 'reel') {
+    rLiked = false; rSaved = false;
+    document.getElementById('rv-av').style.background = prog.color;
+    document.getElementById('rv-img').src = p.img;
+    document.getElementById('rv-pdot').style.background = prog.color;
+    document.getElementById('rv-pname').textContent = prog.name;
+    document.getElementById('rv-strip').style.background = prog.color;
+    document.getElementById('rv-stxt').textContent = prog.icon + ' ' + prog.name;
+    document.getElementById('rv-person').textContent = p.person;
+    document.getElementById('rv-quote').textContent = p.quote;
+    document.getElementById('rv-like').textContent = '♡';
+    document.getElementById('rv-likeN').textContent = p.likes;
+    document.getElementById('rv-comN').textContent = p.comments;
+    document.getElementById('rv-save').textContent = '🔖';
+    document.getElementById('rv-likes').textContent = p.likes + ' Me gusta';
+    document.getElementById('rv-cap').textContent = p.caption + ' ';
+    document.getElementById('rv-hash').textContent = p.hashtags;
+    document.getElementById('rv-coms').textContent = 'Ver los ' + p.comments + ' comentarios';
+    document.getElementById('rv-date').textContent = p.date;
+    document.getElementById('rv-playbtn').style.background = prog.color;
+    document.getElementById('rv-playicon').className = 'play-tri';
+    currentDur = p.duration || '1:00';
+    document.getElementById('rv-time').textContent = '0:00 / ' + currentDur;
+    buildWave('rv-wave', prog.color);
+    show('s-reel');
+
+  } else if (p.type === 'post') {
+    pLiked = false; pSaved = false;
+    document.getElementById('pv-av').style.background = prog.color;
+    document.getElementById('pv-img').src = p.img;
+    document.getElementById('pv-pdot').style.background = prog.color;
+    document.getElementById('pv-pname').textContent = prog.name;
+    document.getElementById('pv-strip').style.background = prog.color;
+    document.getElementById('pv-stxt').textContent = prog.icon + ' ' + prog.name;
+    document.getElementById('pv-person').textContent = p.person;
+    document.getElementById('pv-quote').textContent = p.quote;
+    document.getElementById('pv-like').textContent = '♡';
+    document.getElementById('pv-save').textContent = '🔖';
+    document.getElementById('pv-likes').textContent = p.likes + ' Me gusta';
+    document.getElementById('pv-cap').textContent = p.caption + ' ';
+    document.getElementById('pv-hash').textContent = p.hashtags;
+    document.getElementById('pv-coms').textContent = 'Ver los ' + p.comments + ' comentarios';
+    document.getElementById('pv-date').textContent = p.date;
+    show('s-post');
+
+  } else if (p.type === 'pres') {
+    presLiked = false; presSaved = false;
+    document.getElementById('presv-av').style.background = prog.color;
+    document.getElementById('pres-pname').textContent = prog.name;
+    document.getElementById('pres-pname').style.color = prog.color;
+    document.getElementById('pres-div').style.background = prog.color;
+    document.getElementById('pres-photo').src = p.img;
+    document.getElementById('pres-photo').style.borderColor = prog.color;
+    document.getElementById('pres-name').textContent = p.person;
+    document.getElementById('pres-role').textContent = p.quote;
+    document.getElementById('pres-badge').style.background = prog.color;
+    document.getElementById('pres-badge-t').textContent = p.hora || 'HOY · 20:00 HS';
+    document.getElementById('pres-foot').style.background = prog.color;
+    document.getElementById('pres-foot-t').textContent = prog.icon + ' ' + prog.name + ' · 970universal.com';
+    document.getElementById('presv-like').textContent = '♡';
+    document.getElementById('presv-save').textContent = '🔖';
+    document.getElementById('presv-likes').textContent = p.likes + ' Me gusta';
+    document.getElementById('presv-cap').textContent = p.caption + ' ';
+    document.getElementById('presv-hash').textContent = p.hashtags;
+    document.getElementById('presv-coms').textContent = 'Ver los ' + p.comments + ' comentarios';
+    document.getElementById('presv-date').textContent = p.date;
+    show('s-pres');
+  }
+}
+
+function buildWave(containerId, color) {
+  const wrap = document.getElementById(containerId);
+  wrap.innerHTML = '';
+  waveBars = [];
+  for (let i = 0; i < 44; i++) {
+    const b = document.createElement('div');
+    b.className = 'wb';
+    const h = 4 + Math.random() * 20;
+    b.style.height = h + 'px';
+    b.style.background = '#333';
+    b.style.flex = '1';
+    wrap.appendChild(b);
+    waveBars.push({ el: b, h, color });
+  }
+}
+
+function togglePlay() {
+  if (playing) stopAudio(); else startAudio();
+}
+
+function startAudio() {
+  playing = true;
+  const btn = document.getElementById('rv-playbtn');
+  if (btn) btn.innerHTML = '<div class="pause-duo"><div class="pause-b"></div><div class="pause-b"></div></div>';
+  tick();
+}
+
+function stopAudio() {
+  playing = false;
+  cancelAnimationFrame(animId);
+  const btn = document.getElementById('rv-playbtn');
+  if (btn) btn.innerHTML = '<div class="play-tri" id="rv-playicon"></div>';
+}
+
+let t = 0;
+function tick() {
+  if (!playing) return;
+  t++;
+  waveProgress = Math.min(1, waveProgress + 0.003);
+  const filled = Math.floor(waveBars.length * waveProgress);
+  waveBars.forEach((b, i) => {
+    const wave = Math.sin(t * 0.12 + i * 0.35) * 5;
+    b.el.style.height = Math.max(3, b.h + wave) + 'px';
+    b.el.style.background = i < filled ? b.color : '#333';
+  });
+  const el = document.getElementById('rv-time');
+  if (el) {
+    const parts = currentDur.split(':');
+    const total = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+    const cur = Math.floor(total * waveProgress);
+    const m = Math.floor(cur / 60);
+    const s = cur % 60;
+    el.textContent = m + ':' + (s < 10 ? '0' : '') + s + ' / ' + currentDur;
+  }
+  if (waveProgress < 1) animId = requestAnimationFrame(tick);
+  else { stopAudio(); waveProgress = 0; }
+}
+
+function toggleLikeR()   { rLiked = !rLiked; document.getElementById('rv-like').textContent = rLiked ? '❤️' : '♡'; }
+function toggleSaveR()   { rSaved = !rSaved; document.getElementById('rv-save').textContent = rSaved ? '🏷️' : '🔖'; }
+function toggleLikeP()   { pLiked = !pLiked; document.getElementById('pv-like').textContent = pLiked ? '❤️' : '♡'; }
+function toggleSaveP()   { pSaved = !pSaved; document.getElementById('pv-save').textContent = pSaved ? '🏷️' : '🔖'; }
+function toggleLikePres(){ presLiked = !presLiked; document.getElementById('presv-like').textContent = presLiked ? '❤️' : '♡'; }
+function toggleSavePres(){ presSaved = !presSaved; document.getElementById('presv-save').textContent = presSaved ? '🏷️' : '🔖'; }
+
+function buildGrid() {
+  const grid = document.getElementById('grid');
+  POSTS.forEach((p, i) => {
+    const prog = PROG[p.prog];
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.onclick = () => openPost(i);
+    let badge = '';
+    if (p.type === 'reel') badge = '<span class="cell-badge">▶▶</span>';
+    else if (p.type === 'pres') badge = '<span class="cell-badge" style="font-size:8px;background:rgba(0,0,0,0.5);padding:2px 4px;border-radius:3px;">INVITADO</span>';
+    cell.innerHTML = `
+      <img src="${p.img}" alt="" loading="lazy">
+      <div class="cell-top">
+        <div class="cell-logo"><div class="cell-ldot"></div><span class="cell-l970">970</span></div>
+        <div class="cell-prog"><div class="cell-pdot" style="background:${prog.color};"></div><span class="cell-ptxt">${prog.short}</span></div>
+      </div>
+      ${badge}
+      <div class="cell-bot">
+        <div class="cell-strip" style="background:${prog.color};"><span class="cell-stxt">${prog.icon} ${prog.name}</span></div>
+        <div class="cell-lower">
+          <div class="cell-name">${p.person.length>20?p.person.slice(0,20)+'…':p.person}</div>
+          <div class="cell-q">${p.quote.length>38?p.quote.slice(0,38)+'…':p.quote}</div>
+        </div>
+      </div>`;
+    grid.appendChild(cell);
+  });
+}
+
+function buildPhotos() {
+  const wrap = document.getElementById('photos-grid');
+  POSTS.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'photo-item';
+    const prog = PROG[p.prog];
+    div.innerHTML = `
+      <img src="${p.img}" alt="${p.person}" title="${prog.name}">
+      <a href="${p.img}" download="970-post-${i+1}.jpg" target="_blank">Descargar</a>`;
+    wrap.appendChild(div);
+  });
+}
+
+buildGrid();
+buildPhotos();
+</script>
+</body>
+</html>
